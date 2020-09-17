@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Company>UkooLabs</Company>
+    <FileVersion>1.0.0.0</FileVersion>
+    <Version>1.0.0</Version>
+    <Copyright>Copyright © 2020</Copyright>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <RepositoryUrl>https://github.com/UkooLabs/ImageSharp.Compare</RepositoryUrl>
+    <RepositoryType>GIT</RepositoryType>
+    <Authors>Peter Tribe</Authors>
+    <Description>Library used to compare SixLabors.ImageSharp images for differences.</Description>
+    <ProjectGuid>66959732-5B06-4EBA-AD23-E049BAE08A1E</ProjectGuid>
+    <AssemblyName>UkooLabs.ImageSharp.Compare</AssemblyName>
+    <RootNamespace>UkooLabs.ImageSharp.Compare</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="SixLabors.ImageSharp" Version="1.0.1" />
+  </ItemGroup>
+
+</Project>
