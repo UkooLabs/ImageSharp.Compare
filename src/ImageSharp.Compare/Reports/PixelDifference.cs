@@ -1,7 +1,7 @@
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 
-namespace UkooLabs.ImageSharp.Compare
+namespace UkooLabs.ImageSharp.Compare.Reports
 {
     public readonly struct PixelDifference
     {

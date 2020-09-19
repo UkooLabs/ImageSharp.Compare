@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Advanced;
 using SixLabors.ImageSharp.PixelFormats;
+using UkooLabs.ImageSharp.Compare.Reports;
 
 namespace UkooLabs.ImageSharp.Compare
 {
     public class ExactImageComparer : ImageComparer
     {
-        public static ExactImageComparer Instance { get; } = new ExactImageComparer();
-
         public override ImageSimilarityReport<TPixelA, TPixelB> CompareImagesOrFrames<TPixelA, TPixelB>(
             ImageFrame<TPixelA> expected,
             ImageFrame<TPixelB> actual)

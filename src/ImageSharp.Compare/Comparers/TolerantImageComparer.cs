@@ -1,21 +1,16 @@
-// Copyright (c) Six Labors.
-// Licensed under the Apache License, Version 2.0.
-
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Advanced;
 using SixLabors.ImageSharp.PixelFormats;
+using UkooLabs.ImageSharp.Compare.Exceptions;
+using UkooLabs.ImageSharp.Compare.Reports;
 
 namespace UkooLabs.ImageSharp.Compare
 {
     public class TolerantImageComparer : ImageComparer
     {
-        // 1% of all pixels in a 100*100 pixel area are allowed to have a difference of 1 unit
-        // 257 = (1 / 255) * 65535.
-        public const float DefaultImageThreshold = 257F / (100 * 100 * 65535);
-
         /// <summary>
         /// Individual manhattan pixel difference is only added to total image difference when the individual difference is over 'perPixelManhattanThreshold'.
         /// </summary>
@@ -60,7 +55,7 @@ namespace UkooLabs.ImageSharp.Compare
         {
             if (expected.Size() != actual.Size())
             {
-                throw new InvalidOperationException("Calling ImageComparer is invalid when dimensions mismatch!");
+                throw new ImageDimensionsMismatchException(expected.Size(), actual.Size());
             }
 
             int width = actual.Width;

@@ -8,7 +8,7 @@ namespace PNI.Templates.Mapping
         private static string GetSolutionPath()
         {
             var path = AppDomain.CurrentDomain.BaseDirectory;
-            while (!File.Exists(Path.Combine(path, "UkooLabs.ImageSharp.Compare.sln")))
+            while (!File.Exists(Path.Combine(path, "ImageSharp.Compare.sln")))
             {
                 path = Path.GetFullPath(Path.Combine(path, ".."));
             }

@@ -4,6 +4,7 @@ using System.Linq;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using UkooLabs.ImageSharp.Compare.Exceptions;
+using UkooLabs.ImageSharp.Compare.Reports;
 
 namespace UkooLabs.ImageSharp.Compare
 {
@@ -30,7 +31,7 @@ namespace UkooLabs.ImageSharp.Compare
 
             if (expected.Frames.Count != actual.Frames.Count)
             {
-                throw new Exception("Frame count does not match!");
+                throw new ImageFramesMismatchException(expected.Frames.Count, actual.Frames.Count);
             }
 
             for (int i = 0; i < expected.Frames.Count; i++)
@@ -59,7 +60,7 @@ namespace UkooLabs.ImageSharp.Compare
 
             if (expected.Frames.Count != actual.Frames.Count)
             {
-                throw new ImagesSimilarityException("Image frame count does not match!");
+                throw new ImageFramesMismatchException(expected.Frames.Count, actual.Frames.Count);
             }
 
             IEnumerable<ImageSimilarityReport> reports = comparer.CompareImages(expected, actual);
@@ -84,7 +85,7 @@ namespace UkooLabs.ImageSharp.Compare
 
             if (expected.Frames.Count != actual.Frames.Count)
             {
-                throw new ImagesSimilarityException("Image frame count does not match!");
+                throw new ImageFramesMismatchException(expected.Frames.Count, actual.Frames.Count);
             }
 
             IEnumerable<ImageSimilarityReport<TPixelA, TPixelB>> reports = comparer.CompareImages(expected, actual);
@@ -96,9 +97,9 @@ namespace UkooLabs.ImageSharp.Compare
                     IEnumerable<PixelDifference> outsideChanges = r.Differences.Where(
                         x =>
                         !(ignoredRegion.X <= x.Position.X
-                        && x.Position.X <= ignoredRegion.Right
+                        && x.Position.X < ignoredRegion.Right
                         && ignoredRegion.Y <= x.Position.Y
-                        && x.Position.Y <= ignoredRegion.Bottom));
+                        && x.Position.Y < ignoredRegion.Bottom));
 
                     if (outsideChanges.Any())
                     {

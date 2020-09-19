@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using UkooLabs.ImageSharp.Compare.Reports;
 
 namespace UkooLabs.ImageSharp.Compare.Exceptions
 {
