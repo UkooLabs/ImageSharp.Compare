@@ -12,19 +12,19 @@ namespace UkooLabs.ImageSharp.Compare.Reports
         where TPixelB : unmanaged, IPixel<TPixelB>
     {
         public ImageSimilarityReport(
-            ImageFrame<TPixelA> expectedImage,
-            ImageFrame<TPixelB> actualImage,
+            ImageFrame<TPixelA> expectedImageFrame,
+            ImageFrame<TPixelB> actualImageFrame,
             IEnumerable<PixelDifference> differences,
             float? totalNormalizedDifference = null)
-            : base(expectedImage, actualImage, differences, totalNormalizedDifference)
+            : base(expectedImageFrame, actualImageFrame, differences, totalNormalizedDifference)
         {
         }
 
         public static ImageSimilarityReport<TPixelA, TPixelB> Empty =>
             new ImageSimilarityReport<TPixelA, TPixelB>(null, null, Enumerable.Empty<PixelDifference>(), 0f);
 
-        public new ImageFrame<TPixelA> ExpectedImage => (ImageFrame<TPixelA>)base.ExpectedImage;
+        public new ImageFrame<TPixelA> ExpectedImageFrame => (ImageFrame<TPixelA>)base.ExpectedImageFrame;
 
-        public new ImageFrame<TPixelB> ActualImage => (ImageFrame<TPixelB>)base.ActualImage;
+        public new ImageFrame<TPixelB> ActualImageFrame => (ImageFrame<TPixelB>)base.ActualImageFrame;
     }
 }

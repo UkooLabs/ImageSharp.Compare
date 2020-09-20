@@ -103,7 +103,7 @@ namespace UkooLabs.ImageSharp.Compare
 
                     if (outsideChanges.Any())
                     {
-                        cleanedReports.Add(new ImageSimilarityReport<TPixelA, TPixelB>(r.ExpectedImage, r.ActualImage, outsideChanges, null));
+                        cleanedReports.Add(new ImageSimilarityReport<TPixelA, TPixelB>(r.ExpectedImageFrame, r.ActualImageFrame, outsideChanges, null));
                     }
                 }
 

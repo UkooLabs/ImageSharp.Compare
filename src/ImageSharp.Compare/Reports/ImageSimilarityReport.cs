@@ -1,29 +1,43 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
+using System.Reflection;
 using System.Text;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
+using SixLabors.ImageSharp.Processing;
 
 namespace UkooLabs.ImageSharp.Compare.Reports
 {
     public class ImageSimilarityReport
     {
         protected ImageSimilarityReport(
-            object expectedImage,
-            object actualImage,
+            ImageFrame expectedImageFrame,
+            ImageFrame actualImageFrame,
             IEnumerable<PixelDifference> differences,
             float? totalNormalizedDifference = null)
         {
-            ExpectedImage = expectedImage;
-            ActualImage = actualImage;
+            ExpectedImageFrame = expectedImageFrame;
+            ActualImageFrame = actualImageFrame;
             TotalNormalizedDifference = totalNormalizedDifference;
             Differences = differences.ToArray();
         }
 
-        public object ExpectedImage { get; }
+        public ImageFrame ExpectedImageFrame { get; }
 
-        public object ActualImage { get; }
+        public ImageFrame ActualImageFrame { get; }
+
+        public Image GetDifferenceImage()
+        {
+            var differenceImage = new Image<L8>(ActualImageFrame.Width, ActualImageFrame.Height, new L8(128));
+            foreach (var difference in Differences)
+            {
+                var delta = (byte)(difference.Delta * 255);
+                differenceImage[difference.Position.X, difference.Position.Y].FromL8(new L8(delta));
+            }
+            return differenceImage;
+        }
 
         // TODO: This should not be a nullable value!
         public float? TotalNormalizedDifference { get; }
