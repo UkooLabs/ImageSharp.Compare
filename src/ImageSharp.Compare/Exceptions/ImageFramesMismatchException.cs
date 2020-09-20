@@ -1,5 +1,3 @@
-using SixLabors.ImageSharp;
-
 namespace UkooLabs.ImageSharp.Compare.Exceptions
 {
     public class ImageFramesMismatchException : ImagesSimilarityException

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace PNI.Templates.Mapping
+namespace UkooLabs.ImageSharp.Compare.Tests
 {
     public static class PathHelper
     {

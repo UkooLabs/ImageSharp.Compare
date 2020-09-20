@@ -1,12 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Numerics;
-using System.Reflection;
 using System.Text;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
-using SixLabors.ImageSharp.Processing;
 
 namespace UkooLabs.ImageSharp.Compare.Reports
 {
@@ -28,13 +25,13 @@ namespace UkooLabs.ImageSharp.Compare.Reports
 
         public ImageFrame ActualImageFrame { get; }
 
-        public Image GetDifferenceImage()
+        public Image<Rgba32> CreateDifferenceImage()
         {
-            var differenceImage = new Image<L8>(ActualImageFrame.Width, ActualImageFrame.Height, new L8(128));
+            var differenceImage = new Image<Rgba32>(ActualImageFrame.Width, ActualImageFrame.Height, new Rgba32(128, 128, 128, 128));
             foreach (var difference in Differences)
             {
                 var delta = (byte)(difference.Delta * 255);
-                differenceImage[difference.Position.X, difference.Position.Y].FromL8(new L8(delta));
+                differenceImage[difference.Position.X, difference.Position.Y] = new Rgba32(delta, delta, delta, delta);
             }
             return differenceImage;
         }

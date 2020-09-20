@@ -4,11 +4,10 @@ using SixLabors.ImageSharp.Processing;
 using System;
 using System.IO;
 using System.Linq;
-using UkooLabs.ImageSharp.Compare;
 using UkooLabs.ImageSharp.Compare.Exceptions;
 using Xunit;
 
-namespace PNI.Templates.Mapping.Tests
+namespace UkooLabs.ImageSharp.Compare.Tests
 {
     public class ExactComparerDifferentTests : IDisposable
     {
@@ -25,21 +24,21 @@ namespace PNI.Templates.Mapping.Tests
             var twoFramesImage = BaseImage.Clone();
             _ = twoFramesImage.Frames.CreateFrame();
             TwoFramesImage = twoFramesImage;
-                
+
             var smallerImage = BaseImage.Clone();
             smallerImage.Mutate(m => m.Resize(100, 100));
             SmallerImage = smallerImage;
 
             ModifiedImage = BaseImage.Clone();
             for (var x = 0; x < 100; x++)
-            { 
+            {
                 for (var y = 0; y < 100; y++)
                 {
                     var pixel = ModifiedImage[x, y];
-                    pixel.R = (byte)(255 - pixel.R);
-                    pixel.G = (byte)(255 - pixel.G);
-                    pixel.B = (byte)(255 - pixel.B);
-                    pixel.A = (byte)(255 - pixel.A);
+                    pixel.R = TestHelper.BigChange(pixel.R);
+                    pixel.G = TestHelper.BigChange(pixel.G);
+                    pixel.B = TestHelper.BigChange(pixel.B);
+                    pixel.A = TestHelper.BigChange(pixel.A);
                     ModifiedImage[x, y] = pixel;
                 }
             }

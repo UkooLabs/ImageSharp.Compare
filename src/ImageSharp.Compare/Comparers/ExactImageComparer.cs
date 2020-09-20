@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Advanced;
 using SixLabors.ImageSharp.PixelFormats;
+using UkooLabs.ImageSharp.Compare.Exceptions;
 using UkooLabs.ImageSharp.Compare.Reports;
 
 namespace UkooLabs.ImageSharp.Compare
@@ -15,7 +16,7 @@ namespace UkooLabs.ImageSharp.Compare
         {
             if (expected.Size() != actual.Size())
             {
-                throw new InvalidOperationException("Calling ImageComparer is invalid when dimensions mismatch!");
+                throw new ImageDimensionsMismatchException(expected.Size(), actual.Size());
             }
 
             int width = actual.Width;

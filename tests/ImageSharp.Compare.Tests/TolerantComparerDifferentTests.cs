@@ -4,11 +4,10 @@ using SixLabors.ImageSharp.Processing;
 using System;
 using System.IO;
 using System.Linq;
-using UkooLabs.ImageSharp.Compare;
 using UkooLabs.ImageSharp.Compare.Exceptions;
 using Xunit;
 
-namespace PNI.Templates.Mapping.Tests
+namespace UkooLabs.ImageSharp.Compare.Tests
 {
     public class TolerantComparerDifferentTests : IDisposable
     {
@@ -17,6 +16,7 @@ namespace PNI.Templates.Mapping.Tests
         private Image<Rgba32> SmallerImage { get; }
         private Image<Rgba32> ModifiedImage { get; }
         private Image<Rgba32> SmallChangeImage { get; }
+        private Image<Rgba32> CheckerChangeImage { get; }
 
         public TolerantComparerDifferentTests()
         {
@@ -26,21 +26,21 @@ namespace PNI.Templates.Mapping.Tests
             var twoFramesImage = BaseImage.Clone();
             _ = twoFramesImage.Frames.CreateFrame();
             TwoFramesImage = twoFramesImage;
-                
+
             var smallerImage = BaseImage.Clone();
             smallerImage.Mutate(m => m.Resize(100, 100));
             SmallerImage = smallerImage;
 
             ModifiedImage = BaseImage.Clone();
             for (var x = 0; x < 100; x++)
-            { 
+            {
                 for (var y = 0; y < 100; y++)
                 {
                     var pixel = ModifiedImage[x, y];
-                    pixel.R = (byte)(255 - pixel.R);
-                    pixel.G = (byte)(255 - pixel.G);
-                    pixel.B = (byte)(255 - pixel.B);
-                    pixel.A = (byte)(255 - pixel.A);
+                    pixel.R = TestHelper.BigChange(pixel.R);
+                    pixel.G = TestHelper.BigChange(pixel.G);
+                    pixel.B = TestHelper.BigChange(pixel.B);
+                    pixel.A = TestHelper.BigChange(pixel.A);
                     ModifiedImage[x, y] = pixel;
                 }
             }
@@ -51,17 +51,34 @@ namespace PNI.Templates.Mapping.Tests
                 for (var y = 0; y < 100; y++)
                 {
                     var pixel = SmallChangeImage[x, y];
-                    pixel.R = SlightChange(pixel.R);
-                    pixel.G = SlightChange(pixel.G);
-                    pixel.B = SlightChange(pixel.B);
+                    pixel.R = TestHelper.SlightChange(pixel.R);
+                    pixel.G = TestHelper.SlightChange(pixel.G);
+                    pixel.B = TestHelper.SlightChange(pixel.B);
                     SmallChangeImage[x, y] = pixel;
                 }
             }
-        }
 
-        byte SlightChange(byte value)
-        {
-            return value > 128 ? --value : ++value;
+            CheckerChangeImage = BaseImage.Clone();
+            for (var x = 0; x < CheckerChangeImage.Width; x++)
+            {
+                for (var y = 0; y < CheckerChangeImage.Height; y++)
+                {
+                    var pixel = CheckerChangeImage[x, y];
+                    if (x % 200 < 100 ^ y % 200 >= 100)
+                    {
+                        pixel.R = TestHelper.SlightChange(pixel.R);
+                        pixel.G = TestHelper.SlightChange(pixel.G);
+                        pixel.B = TestHelper.SlightChange(pixel.B);
+                    }
+                    else
+                    {
+                        pixel.R = TestHelper.BigChange(pixel.R);
+                        pixel.G = TestHelper.BigChange(pixel.G);
+                        pixel.B = TestHelper.BigChange(pixel.B);
+                    }
+                    CheckerChangeImage[x, y] = pixel;
+                }
+            }
         }
 
         public void Dispose()
@@ -70,6 +87,7 @@ namespace PNI.Templates.Mapping.Tests
             SmallerImage.Dispose();
             ModifiedImage.Dispose();
             SmallChangeImage.Dispose();
+            CheckerChangeImage.Dispose();
         }
 
         [Fact]
@@ -82,6 +100,19 @@ namespace PNI.Templates.Mapping.Tests
             Assert.Equal("0.1646%", reports[0].DifferencePercentageString);
             Assert.Equal(0.001646257f, reports[0].TotalNormalizedDifference);
             Assert.StartsWith("Total difference:", reports[0].ToString());
+        }
+
+        [Fact]
+        public void TolerantComparer_CompareImages_CheckerImage()
+        {
+            var perPixelManhattanThresholdValue = ImageComparer.CalculatePerPixelManhattanThresholdValue(3, ImageComparer.DefaultPerPixelChannelManhattanThreshold);
+            var reports = ImageComparer.Tolerant(0, perPixelManhattanThresholdValue).CompareImages(BaseImage, CheckerChangeImage).ToArray();
+            Assert.Single(reports);
+            using var actualDifference = reports[0].CreateDifferenceImage();
+            var ExpectedDifferencePath = Path.Combine(PathHelper.ImagesPath, "ExpectedDifference.png");
+            using var expectedDifference = Image.Load<Rgba32>(ExpectedDifferencePath);
+            var differenceReports = ImageComparer.Exact().CompareImages(expectedDifference, actualDifference).ToArray();
+            Assert.Empty(differenceReports);
         }
 
         [Fact]

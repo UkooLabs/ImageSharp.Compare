@@ -1,13 +1,11 @@
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
-using SixLabors.ImageSharp.Processing;
 using System;
 using System.IO;
 using System.Linq;
-using UkooLabs.ImageSharp.Compare;
 using Xunit;
 
-namespace PNI.Templates.Mapping.Tests
+namespace UkooLabs.ImageSharp.Compare.Tests
 {
     public class TolerantComparerSameTests : IDisposable
     {
@@ -23,7 +21,7 @@ namespace PNI.Templates.Mapping.Tests
         {
             BaseImage.Dispose();
         }
-       
+
 
         [Fact]
         public void TolerantComparer_CompareImages_SameImage()
