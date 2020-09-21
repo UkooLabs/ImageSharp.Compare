@@ -27,11 +27,11 @@ namespace UkooLabs.ImageSharp.Compare.Reports
 
         public Image<Rgba32> CreateDifferenceImage()
         {
-            var differenceImage = new Image<Rgba32>(ActualImageFrame.Width, ActualImageFrame.Height, new Rgba32(128, 128, 128, 128));
+            var differenceImage = new Image<Rgba32>(ActualImageFrame.Width, ActualImageFrame.Height, new Rgba32(128, 128, 128, 255));
             foreach (var difference in Differences)
             {
                 var delta = (byte)(difference.Delta * 255);
-                differenceImage[difference.Position.X, difference.Position.Y] = new Rgba32(delta, delta, delta, delta);
+                differenceImage[difference.Position.X, difference.Position.Y] = new Rgba32(delta, delta, delta, 255);
             }
             return differenceImage;
         }
